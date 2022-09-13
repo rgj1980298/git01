@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.group.five.dao.PermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.group.five.pojo.Permission" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="module_id" property="moduleId" jdbcType="INTEGER" />
+    <result column="acl_value" property="aclValue" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, role_id, module_id, acl_value, create_date, update_date
+  </sql>
+
+  <!--批量添加-->
+  <insert id="insertBatch" parameterType="list">
+    insert into
+    t_permission(module_id, role_id, create_date, update_date,acl_value)
+    values
+    <foreach collection="list" item="ur" separator=",">
+      (#{ur.moduleId},#{ur.roleId},#{ur.createDate},#{ur.updateDate},#{ur.aclValue})
+    </foreach>
+  </insert>
+
+
+  <select id="queryUserHasRolesHasPermissions" parameterType="int"
+          resultType="java.lang.String">
+    select distinct p.acl_value
+    from t_user_role ur left join t_permission p on ur.role_id = p.role_id
+    where ur.user_id=#{userId}
+  </select>
+</mapper>

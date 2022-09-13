@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.group.five.dao.ExamMapper" >
+  <resultMap id="BaseResultMap" type="com.group.five.pojo.Exam" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="courseId" property="courseid" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="place" property="place" jdbcType="VARCHAR" />
+    <result column="clazzId" property="clazzid" jdbcType="INTEGER" />
+    <result column="teacherId" property="teacherid" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+    <result column="coursename" property="coursename" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, courseId, time, place, clazzId, teacherId, create_date, update_date, is_valid, 
+    coursename
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_exam
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_exam
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.group.five.pojo.Exam" >
+    insert into t_exam (id, courseId, time, 
+      place, clazzId, teacherId, 
+      create_date, update_date, is_valid, 
+      coursename)
+    values (#{id,jdbcType=INTEGER}, #{courseid,jdbcType=INTEGER}, #{time,jdbcType=TIMESTAMP}, 
+      #{place,jdbcType=VARCHAR}, #{clazzid,jdbcType=INTEGER}, #{teacherid,jdbcType=INTEGER}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{isValid,jdbcType=INTEGER}, 
+      #{coursename,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.group.five.pojo.Exam" >
+    insert into t_exam
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="courseid != null" >
+        courseId,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+      <if test="place != null" >
+        place,
+      </if>
+      <if test="clazzid != null" >
+        clazzId,
+      </if>
+      <if test="teacherid != null" >
+        teacherId,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="isValid != null" >
+        is_valid,
+      </if>
+      <if test="coursename != null" >
+        coursename,
+      </if>
+      <if test="coursename != null" >
+        courseId
+      </if>
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="courseid != null" >
+        #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="place != null" >
+        #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="clazzid != null" >
+        #{clazzid,jdbcType=INTEGER},
+      </if>
+      <if test="teacherid != null" >
+        #{teacherid,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isValid != null" >
+        #{isValid,jdbcType=INTEGER},
+      </if>
+      <if test="coursename != null" >
+        #{coursename,jdbcType=VARCHAR},
+      </if>
+      <if test="coursename != null" >
+        (SELECT
+        id
+        from
+        t_course c
+        where
+        c.is_valid = 1
+        and course_name=#{coursename})
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.five.pojo.Exam" >
+    update t_exam
+    <set >
+      <if test="courseid != null" >
+        courseId = #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="place != null" >
+        place = #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="clazzid != null" >
+        clazzId = #{clazzid,jdbcType=INTEGER},
+      </if>
+      <if test="teacherid != null" >
+        teacherId = #{teacherid,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isValid != null" >
+        is_valid = #{isValid,jdbcType=INTEGER},
+      </if>
+      <if test="coursename != null" >
+        coursename = #{coursename,jdbcType=VARCHAR},
+      </if>
+      <if test="coursename != null" >
+        courseId =
+        (SELECT
+        id
+        from
+        t_course c
+        where
+        c.is_valid = 1
+        and course_name=#{coursename})
+      </if>
+
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.five.pojo.Exam" >
+    update t_exam
+    set courseId = #{courseid,jdbcType=INTEGER},
+      time = #{time,jdbcType=TIMESTAMP},
+      place = #{place,jdbcType=VARCHAR},
+      clazzId = #{clazzid,jdbcType=INTEGER},
+      teacherId = #{teacherid,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      is_valid = #{isValid,jdbcType=INTEGER},
+      coursename = #{coursename,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--考务管理 多条件查询 -->
+  <select id="selectByParams" parameterType="com.group.five.query.ExamQuery"
+          resultType="com.group.five.pojo.Exam">
+    select
+    e.id, courseId, time, place, clazzId, teacherId, e.create_date, e.update_date, e.is_valid,course_name,clazz_name,username
+    from
+    t_exam e
+    left join t_course c
+    on e.courseId=c.id
+    left join t_user u
+    on e.teacherId = u.id
+    left join t_clazz z
+    on e.clazzId=z.id
+    <where>
+      e.is_valid = 1
+      <if test="id != null ">
+        and e.id = #{id}
+      </if>
+      <if test="courseid != null">
+        and e.courseId = #{courseid}
+      </if>
+      <if test="clazzid != null">
+        and e.clazzId = #{clazzid}
+      </if>
+    </where>
+  </select>
+
+  <!--查找有哪些班级编号-->
+  <select id="queryAllClazzid" resultType="map" >
+    SELECT
+      id clazzid
+    from
+      t_clazz c
+
+
+  </select>
+
+  <update id="deleteBatch">
+    update
+    t_exam
+    set
+    is_valid = 0
+    where
+    id
+    in
+    <foreach collection="array" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </update>
+  <!--查课程名称-->
+  <select id="queryCourseName" parameterType="string" resultType="int">
+    select clazzId
+    from
+        t_exam
+    where
+        coursename=#{coursename}
+    and
+      is_valid = 1
+  </select>
+
+  <!--查询包含指定班号的课程id，即这个班考了哪些课程-->
+  <select id="selectCourse" parameterType="int" resultType="int">
+    select
+      courseId
+    from
+      t_exam
+    where
+      clazzId=#{clazzid}
+      and
+      is_valid = 1
+  </select>
+
+  <!--查询课程编号-->
+  <select id="queryCourseid" parameterType="string" resultType="int">
+    select
+        distinct
+      courseId
+    from
+      t_exam
+    where
+      coursename=#{coursename}
+      and
+      is_valid = 1
+  </select>
+
+  <!--根据课程名称和班级号唯一确定考试编号-->
+  <select id="queryExamid" resultType="int">
+    select
+      id
+    from
+      t_exam
+    where
+      clazzId=#{param1}
+      and
+      coursename=#{param2}
+      and
+      is_valid = 1
+  </select>
+
+  <!--查找有哪些课程-->
+  <select id="queryAllCourse" resultType="map" >
+    SELECT
+      course_name coursename
+    from
+      t_course c
+    where
+      c.is_valid = 1
+
+  </select>
+
+  <!--查找有哪些学生编号-->
+  <select id="queryAllStudentid" resultType="map" >
+    SELECT
+      id studentid
+    from
+      t_user
+    where
+      is_valid = 1
+      and  id in
+           (select
+              user_id
+            from
+              t_user_role 
+            where
+              role_id=2)
+
+  </select>
+
+  <!--查找有哪些教师编号-->
+  <select id="queryAllTeacherid" resultType="map" >
+    SELECT
+      id teacherid
+    from
+      t_user
+    where
+      is_valid = 1
+      and  id in
+           (select
+              user_id
+            from
+              t_user_role
+            where
+              role_id=1)
+
+  </select>
+</mapper>

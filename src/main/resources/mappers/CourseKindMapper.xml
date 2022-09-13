@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.five.dao.CourseKindMapper">
+  <resultMap id="BaseResultMap" type="com.group.five.pojo.CourseKind">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="kind_name" jdbcType="VARCHAR" property="kindName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_valid" jdbcType="INTEGER" property="isValid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, kind_name, create_time, update_time, is_valid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_course_kind
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_course_kind
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.group.five.pojo.CourseKind">
+    insert into t_course_kind (id, kind_name, create_time, 
+      update_time, is_valid)
+    values (#{id,jdbcType=INTEGER}, #{kindName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isValid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.group.five.pojo.CourseKind">
+    insert into t_course_kind
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="kindName != null">
+        kind_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isValid != null">
+        is_valid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="kindName != null">
+        #{kindName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isValid != null">
+        #{isValid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.five.pojo.CourseKind">
+    update t_course_kind
+    <set>
+      <if test="kindName != null">
+        kind_name = #{kindName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isValid != null">
+        is_valid = #{isValid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.five.pojo.CourseKind">
+    update t_course_kind
+    set kind_name = #{kindName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_valid = #{isValid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="queryAllCourseKind" resultType="java.util.Map">
+    select
+        k.id id,
+        k.kind_name kindName
+    from
+    t_course_kind k
+    where
+    is_valid = 1
+  </select>
+
+  <select id="selectByParams" parameterType="com.group.five.query.CourseKindQuery" resultType="com.group.five.pojo.CourseKind">
+    select
+    <include refid="Base_Column_List"></include>
+    from
+    t_course_kind k
+    <where>
+      k.is_valid = 1
+      <if test="kindName != null and kindName != ''">
+        and k.kind_name like concat('%',#{kindName},'%')
+      </if>
+
+    </where>
+  </select>
+
+  <select id="selectCourseByKindIds" parameterType="list" resultType="java.util.Map">
+    select
+        k.id id,
+        count(c.id) coursesCount
+    from
+        t_course_kind k
+        left join t_course c on k.id = c.course_kind_id
+    where
+        k.id
+    in
+    <foreach collection="array" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+        and k.is_valid = 1
+        and c.is_valid = 1
+    group by k.id
+  </select>
+
+  <!-- （批量）删除操作 -->
+  <update id="deleteBatch">
+    update
+    t_course_kind
+    set
+    is_valid = 0
+    where
+    id
+    in
+    <foreach collection="array" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </update>
+
+  <select id="selectKindNameById" parameterType="Integer" resultType="String">
+    select
+        kind_name kindName
+    from
+        t_course_kind
+    where
+        id = #{courseKindId}
+  </select>
+</mapper>

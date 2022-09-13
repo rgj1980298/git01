@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.group.five.dao.CommentMapper" >
+  <resultMap id="BaseResultMap" type="com.group.five.pojo.Comment" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="student_Name" property="studentName" jdbcType="VARCHAR" />
+    <result column="teacher_Name" property="teacherName" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, student_Name, teacher_Name, description, is_valid, update_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_comment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_comment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.group.five.pojo.Comment" >
+    insert into t_comment (id, student_Name, teacher_Name, 
+      description, is_valid, update_date
+      )
+    values (#{id,jdbcType=INTEGER}, #{studentName,jdbcType=VARCHAR}, #{teacherName,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{isValid,jdbcType=INTEGER}, #{updateDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.group.five.pojo.Comment" >
+    insert into t_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="studentName != null" >
+        student_Name,
+      </if>
+      <if test="teacherName != null" >
+        teacher_Name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="isValid != null" >
+        is_valid,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="studentName != null" >
+        #{studentName,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherName != null" >
+        #{teacherName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isValid != null" >
+        #{isValid,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.five.pojo.Comment" >
+    update t_comment
+    <set >
+      <if test="studentName != null" >
+        student_Name = #{studentName,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherName != null" >
+        teacher_Name = #{teacherName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isValid != null" >
+        is_valid = #{isValid,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.five.pojo.Comment" >
+    update t_comment
+    set student_Name = #{studentName,jdbcType=VARCHAR},
+      teacher_Name = #{teacherName,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      is_valid = #{isValid,jdbcType=INTEGER},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--多条件分页查询数据-->
+  <select id="queryByParams" parameterType="com.group.five.query.CommentQuery" resultType="com.group.five.pojo.Comment">
+    select
+    *
+    from
+    t_comment
+    <where>
+      is_valid = 1
+      <if test="studentName != null and studentName != ''">
+        and  student_Name like concat("%",#{studentName},"%")
+      </if>
+      <if test="teacherName != null and teacherName != ''">
+        and  teacher_Name like concat("%",#{teacherName},"%")
+      </if>
+    </where>
+  </select>
+
+  <!--批量删除-->
+  <update id="deleteBatch" >
+    UPDATE t_comment
+    SET is_valid = 0
+    WHERE
+    id
+    IN
+    <foreach collection="array" open="(" close=")" item="id" separator=",">
+      #{id}
+    </foreach>
+  </update>
+</mapper>

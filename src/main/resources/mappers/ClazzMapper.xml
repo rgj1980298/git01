@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.group.five.dao.ClazzMapper" >
+    <resultMap id="BaseResultMap" type="com.group.five.pojo.Clazz" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="class_name" property="clazzName" jdbcType="VARCHAR" />
+        <result column="num" property="num" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    id, class_name, num
+  </sql>
+    <insert id="insertSelective" parameterType="com.group.five.pojo.Clazz" >
+        insert into t_clazz
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="clazzName != null" >
+                clazz_name,
+            </if>
+            <if test="num != null" >
+                num,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="clazzName != null" >
+                #{clazzName,jdbcType=VARCHAR},
+            </if>
+            <if test="num != null" >
+                #{num,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.group.five.pojo.Clazz" >
+        update t_clazz
+        <set >
+            <if test="clazzName != null" >
+                clazz_name = #{clazzName,jdbcType=VARCHAR},
+            </if>
+            <if test="num != null" >
+                num = #{num,jdbcType=VARCHAR},
+            </if>
+                teacher_name = #{teacherName,jdbcType=VARCHAR}
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from t_clazz
+    where id = #{id}
+  </select>
+    <!--多条件查询-->
+    <select id="queryClazzByParams" parameterType="com.group.five.query.ClazzQuery" resultType="com.group.five.pojo.Clazz">
+        select
+            id,
+            clazz_name clazzName,
+            num,
+            teacher_id teacherId,
+            teacher_name teacherName,
+            status,
+            mode
+        from
+            t_clazz
+        <where>
+            <if test="id!=null and id!=''">
+                and id = #{id}
+            </if>
+            <if test="clazzName!=null and clazzName!=''">
+                and clazz_name like concat('%',#{clazzName},'%')
+            </if>
+        </where>
+    </select>
+    <!--根据id查询clazz对象-->
+    <select id="selectById" parameterType="int" resultType="com.group.five.pojo.Clazz" >
+        select * from t_clazz where id = #{id}
+  </select>
+    <!--通过班级名称查询班级-->
+    <select id="selectClazzByName" resultType="int" parameterType="string">
+        select count(1) from t_clazz where clazz_name = #{clazzName}
+    </select>
+
+    <select id="selectClazzByNameNotId" resultType="int" parameterType="com.group.five.pojo.Clazz">
+        select count(1) from t_clazz where clazz_name = #{clazzName} and id != #{id}
+    </select>
+    <!--批量删除-->
+    <delete id="deleteBatch" >
+        delete from t_clazz
+        <where>
+            id in
+                <foreach collection="array" item="ids" open="(" separator="," close=")" >
+                #{ids}
+                </foreach>
+        </where>
+    </delete>
+    <!--添加班级-->
+    <insert id="addClazz" >
+        insert into t_clazz(clazz_name,teacher_name,num,teacher_id) values (#{clazzName},#{teacherName},#{num},#{teacherId})
+    </insert>
+    <!--查询所有教师-->
+    <select id="queryAllTeachers" resultType="map">
+        select t.id,username teacherName from t_user t left join
+        t_user_role tu on t.id = tu.user_id where tu.role_id = 1
+    </select>
+    <!--自习状态-->
+    <update id="updateStatus" parameterType="com.group.five.pojo.Clazz">
+        update t_clazz set status = #{status} where id = #{id}
+    </update>
+    <!--自习状态-->
+    <update id="updateMode" parameterType="com.group.five.pojo.Clazz">
+        update t_clazz set mode = #{mode} where id = #{id}
+    </update>
+
+</mapper>
+
+
+
+

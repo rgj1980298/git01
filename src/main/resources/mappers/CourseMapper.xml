@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.group.five.dao.CourseMapper" >
+  <resultMap id="BaseResultMap" type="com.group.five.pojo.Course" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="course_kind_id" property="courseKindId" jdbcType="INTEGER" />
+    <result column="course_kind" property="courseKind" jdbcType="VARCHAR" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+    <result column="total_count" property="totalCount" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="teacher_name" property="teacherName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, course_kind_id, course_kind, course_name, begin_time, total_count, content, is_valid, create_time,
+    update_time, teacher_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_course
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_course
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.group.five.pojo.Course" >
+    insert into t_course (id, course_kind_id, course_kind, course_name,
+      begin_time, total_count, content, 
+      is_valid, create_time, update_time, 
+      teacher_name)
+    values (#{id,jdbcType=INTEGER}, #{courseKindId,jdbcType=VARCHAR}, #{courseKind,jdbcType=VARCHAR}, #{courseName,jdbcType=VARCHAR},
+      #{beginTime,jdbcType=TIMESTAMP}, #{totalCount,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
+      #{isValid,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{teacherName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.group.five.pojo.Course" >
+    insert into t_course
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="courseKindId != null" >
+        course_kind_id,
+      </if>
+      <if test="courseKind != null" >
+        course_kind,
+      </if>
+      <if test="courseName != null" >
+        course_name,
+      </if>
+      <if test="beginTime != null" >
+        begin_time,
+      </if>
+      <if test="totalCount != null" >
+        total_count,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="isValid != null" >
+        is_valid,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="teacherName != null" >
+        teacher_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="courseKindId != null" >
+        #{courseKindId,jdbcType=VARCHAR},
+      </if>
+      <if test="courseKind != null" >
+        #{courseKind,jdbcType=VARCHAR},
+      </if>
+      <if test="courseName != null" >
+        #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null" >
+        #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalCount != null" >
+        #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="isValid != null" >
+        #{isValid,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="teacherName != null" >
+        #{teacherName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.group.five.pojo.Course" >
+    update t_course
+    <set >
+      <if test="courseKindId != null" >
+        course_kind_id = #{courseKindId,jdbcType=VARCHAR},
+      </if>
+      <if test="courseKind != null" >
+        course_kind = #{courseKind,jdbcType=VARCHAR},
+      </if>
+      <if test="courseName != null" >
+        course_name = #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalCount != null" >
+        total_count = #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="isValid != null" >
+        is_valid = #{isValid,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="teacherName != null" >
+        teacher_name = #{teacherName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.group.five.pojo.Course" >
+    update t_course
+    set course_kind_id = #{courseKindId,jdbcType=VARCHAR},
+        course_kind = #{courseKind,jdbcType=VARCHAR},
+      course_name = #{courseName,jdbcType=VARCHAR},
+      begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      total_count = #{totalCount,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      is_valid = #{isValid,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      teacher_name = #{teacherName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--通过CourseQuery多条件查询Course-->
+  <select id="selectByParams" parameterType="com.group.five.query.CourseQuery" resultType="com.group.five.pojo.Course">
+    select
+    <include refid="Base_Column_List"></include>
+    from
+    t_course c
+    <where>
+      c.is_valid = 1
+      <if test="courseKindId != null and courseKindId != ''">
+        and c.course_kind_id like concat('%',#{courseKindId},'%')
+      </if>
+      <if test="courseName != null and courseName != ''">
+        and c.course_name like concat('%',#{courseName},'%')
+      </if>
+      <if test="minTotalCount != null and minTotalCount != ''">
+        and c.total_count <![CDATA[ >= ]]> #{minTotalCount}
+      </if>
+      <if test="maxTotalCount != null and maxTotalCount != ''">
+        and c.total_count <![CDATA[ <= ]]> #{maxTotalCount}
+      </if>
+      <if test="teacherName != null and teacherName != ''">
+        and c.teacher_name = #{teacherName}
+      </if>
+    </where>
+  </select>
+
+  <!-- （批量）删除操作 -->
+  <update id="deleteBatch">
+    update
+     t_course
+    set
+     is_valid = 0
+    where
+      id
+    in
+    <foreach collection="array" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </update>
+
+<!--  <select id="selectInfoByParams" parameterType="com.group.five.query.AllQueryForCourse" resultType="java.util.Map">
+    select
+        tc.id courseId,tc.course_name courseName,
+        tc.course_kind_id course_kind_id,tc.course_kind course_kind,
+        tc.begin_time begin_time,tc.total_count total_count,
+        tc.content content,tc.is_valid is_valid,
+        tc.create_time create_time,IFNULL(tc.update_time,0) update_time,
+        tu.id teacherId,IFNULL(tu.trueName,0) teacherName,
+        tcz.id clazzId,tcz.clazz_name clazzName
+    from
+        t_course tc left join t_course_teacher tct
+    on tc.id=tct.course_id left join t_user tu
+        on tct.teacher_id = tu.id left join t_clazz tcz on tcz.teacher_id = tu.id
+    where
+        tc.is_valid = 1
+        and tu.is_valid = 1
+        and tcz.status = 1
+    <if test="courseKindId != null and courseKindId != ''">
+      and c.course_kind_id like concat('%',#{courseKindId},'%')
+    </if>
+    <if test="courseName != null and courseName != ''">
+      and c.course_name like concat('%',#{courseName},'%')
+    </if>
+    <if test="minTotalCount != null and minTotalCount != ''">
+      and c.total_count <![CDATA[ >= ]]> #{minTotalCount}
+    </if>
+    <if test="maxTotalCount != null and maxTotalCount != ''">
+      and c.total_count <![CDATA[ <= ]]> #{maxTotalCount}
+    </if>
+    <if test="teacherName != null and teacherName != ''">
+      and tu.trueName = #{teacherName}
+    </if>
+    <if test="className != null and className != ''">
+      and tcz.clazz_name = #{className}
+    </if>
+  </select>-->
+</mapper>

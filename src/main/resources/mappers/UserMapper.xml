@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.group.five.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.group.five.pojo.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="userName" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="grade" property="grade" jdbcType="VARCHAR" />
+    <result column="grade_id" property="gradeId" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="selectByName" parameterType="String" resultType="com.group.five.pojo.User">
+    select
+        *
+    from t_user where is_valid = 1 and username = #{userName}
+  </select>
+  <update id="deleteById">
+    update t_user set is_valid = 0 where id in
+    <foreach collection="array" open="(" close=")" item="id" separator=",">
+        #{id}
+    </foreach>
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+        *
+    from t_user
+    where id = #{id}
+  </select>
+  <select id="selectByParams" parameterType="com.group.five.query.UserQuery" resultType="com.group.five.pojo.User">
+    select * from t_user
+    <where>
+        is_valid =1
+      <if test="null!=userName and userName !=''">
+        and username like concat('%',#{userName},'%')
+      </if>
+      <if test="null!=phone and phone != ''">
+        and phone = #{phone}
+      </if>
+      <if test="null!=email and email != ''">
+        and email = #{email}
+      </if>
+    </where>
+  </select>
+  <insert id="insertSelective" parameterType="com.group.five.pojo.User" >
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="id!=null">
+          id,
+        </if>
+      <if test="userName!=null">
+        username,
+      </if>
+      <if test="password!=null">
+        password,
+      </if>
+      <if test="isValid!=null">
+        is_valid,
+      </if>
+      <if test="email!=null">
+        email,
+      </if>
+      <if test="address!=null">
+        address,
+      </if>
+      <if test="phone!=null">
+        phone,
+      </if>
+      <if test="age!=null">
+        age,
+      </if>
+      <if test="grade!=null">
+        grade,
+      </if>
+      <if test="gradeId!=null">
+        grade_Id,
+      </if>
+      <if test="createDate!=null">
+        create_date,
+      </if>
+      <if test="updateDate!=null">
+        update_date,
+      </if>
+      <if test="roleId!=null">
+        roleId,
+      </if>
+      <if test="trueName!=null">
+        trueName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id!=null">
+          #{id},
+        </if>
+      <if test="userName!=null">
+        #{userName},
+      </if>
+      <if test="password!=null">
+        #{password},
+      </if>
+      <if test="isValid!=null">
+        #{isValid},
+      </if>
+      <if test="email!=null">
+        #{email},
+      </if>
+      <if test="address!=null">
+        #{address},
+      </if>
+      <if test="phone!=null">
+        #{phone},
+      </if>
+      <if test="age!=null">
+        #{age},
+      </if>
+      <if test="grade!=null">
+        #{grade},
+      </if>
+      <if test="gradeId!=null">
+        #{gradeId},
+      </if>
+      <if test="createDate!=null">
+        #{createDate},
+      </if>
+      <if test="updateDate!=null">
+        #{updateDate},
+      </if>
+      <if test="roleId!=null">
+        #{roleId},
+      </if>
+      <if test="trueName!=null">
+        #{trueName},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="String">
+    update t_user
+    <set>
+      <if test="id!=null">
+        id=#{id},
+      </if>
+      <if test="username!=null">
+        username=#{username},
+      </if>
+      <if test="password!=null">
+        password=#{password},
+      </if>
+      <if test="isValid!=null">
+        is_valid=#{isValid},
+      </if>
+      <if test="email!=null">
+        email=#{email},
+      </if>
+      <if test="address!=null">
+        address=#{address},
+      </if>
+      <if test="phone!=null">
+        phone=#{phone},
+      </if>
+      <if test="age!=null">
+        age=#{age},
+      </if>
+      <if test="grade!=null">
+        grade=#{grade},
+      </if>
+      <if test="gradeId!=null">
+        grade_Id=#{gradeId},
+      </if>
+      <if test="createDate!=null">
+        create_date=#{createDate},
+      </if>
+      <if test="updateDate!=null">
+        update_date=#{updateDate},
+      </if>
+      <if test="roleId!=null">
+        roleId=#{roleId},
+      </if>
+      <if test="trueName!=null">
+        trueName=#{trueName},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="queryAllRoles" resultType="Map" parameterType="int">
+    select
+      r.role_name roleName,
+      r.id id,
+      CASE WHEN IFNULL(temp.id,0) = 0 THEN ""
+           ELSE "selected" END
+        as "selected"
+    from
+      t_role r
+        left join (
+        SELECT
+          r1.role_name,r1.id
+        FROM
+          t_user_role ur
+            left join
+          t_role r1
+          on
+            ur.role_id = r1.id
+        where
+          ur.user_id = #{id}
+      ) temp
+                  on
+                    temp.id = r.id where r.is_valid = 1
+  </select>
+
+  <select id="queryAllClazz" resultType="Map" parameterType="int">
+    select
+      r.clazz_name clazzName,
+      r.id id,
+      CASE WHEN IFNULL(temp.id,0) = 0 THEN ""
+           ELSE "selected" END
+        as "selected"
+    from
+      t_clazz r
+        left join (
+        SELECT
+          r1.clazz_name,r1.id
+        FROM
+          t_user ur
+            left join
+          t_clazz r1
+          on
+            ur.grade_Id = r1.id
+        where
+          ur.id = #{id}
+      ) temp
+                on
+                    temp.id = r.id
+  </select>
+
+</mapper>
